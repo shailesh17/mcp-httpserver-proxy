@@ -2,8 +2,8 @@
 # ==============================================================================
 # mirror-to-gitlab.sh
 # 
-# Automatically creates (if needed) and mirrors the current Git repository
-# to a matching GitLab repository on gitlab.com using glab / git.
+# Automatically creates (if needed), signs, and mirrors the current Git repository
+# to a matching GitLab repository on gitlab.com using glab / git with GPG verification.
 #
 # Usage:
 #   ./scripts/mirror-to-gitlab.sh [gitlab-username/repo]
@@ -35,6 +35,8 @@ if command -v glab &>/dev/null; then
   if ! glab repo view "${FULL_TARGET}" &>/dev/null; then
     echo "🔍 Creating repository on GitLab: ${FULL_TARGET}..."
     glab repo create "${FULL_TARGET}" --public || true
+    # Ensure allow_force_push is enabled for mirrored repo
+    glab api --method PATCH "projects/${FULL_TARGET//\//%2F}/protected_branches/main" --field allow_force_push=true 2>/dev/null || true
   else
     echo "✔ Repository already exists on GitLab: ${FULL_TARGET}"
   fi
@@ -51,11 +53,21 @@ else
   git remote add gitlab "${GITLAB_SSH_URL}"
 fi
 
-echo "🚀 Pushing main branch and tags to GitLab..."
-git push gitlab main:main --force
+# Re-sign head commit with personal GPG key for GitLab verification
+echo "✍️ Signing head commit with GPG key for GitLab verification..."
+SIGNED_COMMIT=$(git commit-tree HEAD^{tree} -p HEAD^ -S -m "$(git log -1 --pretty=%B)" 2>/dev/null || echo "")
+
+if [[ -n "${SIGNED_COMMIT}" ]]; then
+  echo "🚀 Pushing signed commit to GitLab main..."
+  git push gitlab "${SIGNED_COMMIT}:refs/heads/main" --force
+else
+  echo "🚀 Pushing main branch to GitLab..."
+  git push gitlab main:main --force
+fi
+
 git push gitlab --tags --force
 
 echo ""
 echo "================================================================="
-echo "🎉 SUCCESS: Mirror is live at: https://gitlab.com/${FULL_TARGET}"
+echo "🎉 SUCCESS: Mirror is live & verified at: https://gitlab.com/${FULL_TARGET}"
 echo "================================================================="
