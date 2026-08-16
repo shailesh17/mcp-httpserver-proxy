@@ -19,9 +19,6 @@ yarn-debug.log*
 .DS_Store
 Thumbs.db
 
-# Trunk
-.trunk/*
-!.trunk/trunk.yaml
 
 # Testing & Coverage
 coverage/
