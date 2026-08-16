@@ -51,8 +51,8 @@ else
   git remote add gitlab "${GITLAB_SSH_URL}"
 fi
 
-echo "🚀 Pushing all branches and tags to GitLab..."
-git push gitlab --all --force
+echo "🚀 Pushing main branch and tags to GitLab..."
+git push gitlab main:main --force
 git push gitlab --tags --force
 
 echo ""

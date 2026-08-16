@@ -1,4 +1,4 @@
-image: node:22-alpine
+image: node:22-bookworm-slim
 
 stages:
   - build
