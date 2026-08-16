@@ -1,4 +1,7 @@
-image: node:22-bookworm-slim
+default:
+  image:
+    name: node:22
+    entrypoint: ['']
 
 stages:
   - build
