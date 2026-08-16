@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentation & Setup Guides
+    url: https://github.com/shailesh17/mcp-httpserver-proxy#readme
+    about: Read the configuration guides for Claude Desktop, Cursor, and VS Code.
+  - name: 💬 Model Context Protocol Specification
+    url: https://modelcontextprotocol.io/
+    about: Learn more about MCP architecture, transports, and client compatibility.

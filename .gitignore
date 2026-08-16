@@ -1,6 +1,28 @@
+# Dependencies
 node_modules/
+
+# Build artifacts
 dist/
-.trunk/
-!.trunk/trunk.yaml
-.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+
+# Environment files
 .env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+
+# Cache
+.cache/

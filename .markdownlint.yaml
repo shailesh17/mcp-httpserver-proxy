@@ -1,0 +1,15 @@
+# Markdownlint configuration
+default: true
+
+# MD013: Line length - disabled for documentation tables, URLs, and paragraphs
+MD013: false
+
+# MD033: Inline HTML - allowed for center-aligned badges and headers
+MD033: false
+
+# MD024: Multiple headings with same content
+MD024:
+  siblings_only: true
+
+# MD040: Fenced code blocks language
+MD040: false
