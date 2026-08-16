@@ -1,6 +1,6 @@
 # Agent Guidelines for `mcp-httpserver-proxy`
 
-Welcome, AI agent! This document details the technical architecture, development workflows, strict constraints, and coding standards for this repository.
+Welcome, AI agent! This document details the technical architecture, development workflows, strict constraints, coding standards, and Pull Request procedures for this repository.
 
 ---
 
@@ -41,10 +41,30 @@ The primary entry point is `src/index.ts`, which compiles to `dist/index.js` as 
 
 ### 4. Git & Commit Standards
 
-- All commit messages and PR titles must follow [Conventional Commits](https://www.conventionalcommits.org/):
-  - Format: `<type>(<scope>): <description>`
-  - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
+- All commit messages and PR titles must follow **Emojified Conventional Commits**:
+  - Format: `<emoji> <type>(<scope>): <description>`
+  - Types: `✨ feat`, `🐛 fix`, `📝 docs`, `🎨 style`, `♻️ refactor`, `🚀 perf`, `🧪 test`, `📦 build`, `👷 ci`, `🔧 chore`, `⏪ revert`.
 - Commits are verified locally via Trunk git hooks (`commitlint`).
+- PR titles are verified in CI via GitHub Actions (`semantic-pr.yml`).
+
+---
+
+## 🤖 AI Pull Request Workflow
+
+When instructed to open a Pull Request, use the [create-pr skill](.agents/skills/create-pr/SKILL.md):
+
+1. **Pre-flight**: Run `pnpm run build`, `pnpm run format`, and `pnpm run check`. Ensure 0 errors.
+2. **Testing**: Run mock SSE verification if transport was touched (`node .agents/skills/mock-sse-server/scripts/mock-server.js`).
+3. **Branch & Push**: Create a feature branch and push to remote (`git push -u origin <branch>`).
+4. **Open PR via `gh pr create`**:
+   - **Title**: Emojified Conventional Commit (e.g. `✨ feat(cli): add version and help flags`).
+   - **Body**: Rich Markdown format including:
+     - `🤖 AI Agent & Model`
+     - `📋 Description & What Changed`
+     - `💡 Motivation & Why`
+     - `🧪 How to Test`
+     - `🔍 Testing Evidence & Execution Logs`
+     - `🛡️ Contributor Checklist`
 
 ---
 

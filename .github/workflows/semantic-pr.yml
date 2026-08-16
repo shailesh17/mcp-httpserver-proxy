@@ -33,5 +33,16 @@ jobs:
             ci
             chore
             revert
+            ✨ feat
+            🐛 fix
+            📝 docs
+            🎨 style
+            ♻️ refactor
+            🚀 perf
+            🧪 test
+            📦 build
+            👷 ci
+            🔧 chore
+            ⏪ revert
           requireScope: false
           validateSingleCommit: true

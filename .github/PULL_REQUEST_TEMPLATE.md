@@ -1,48 +1,63 @@
 # Pull Request
 
-> **🤖 AI-Native Development Repository**
-> This repository is designed to be built, tested, and maintained using AI coding agents (such as Antigravity, Cursor, Claude Code, GitHub Copilot, or Gemini CLI).
+> **🤖 AI-Native Contribution Flow**
+> This repository uses AI coding agents to build, test, and open Pull Requests.
 >
-> **Prompt for your AI agent to generate this PR**:
+> **PR Title Format**: `<emoji> <type>(<scope>): <description>` (e.g. `✨ feat(cli): add help and version flags`)
+>
+> **Agent Prompt**:
 >
 > ```text
 > Review the diff against `main`, run `pnpm run build`, `pnpm run format`, and `pnpm run check`.
-> Then generate a complete Pull Request description following the repository template with:
-> 1. A Conventional Commit PR title (e.g. `feat: ...`, `fix: ...`)
-> 2. Summary of architectural changes
-> 3. AI agent / model used
-> 4. Verification & test results
+> Then generate a complete Pull Request using the repository template with:
+> 1. Emojified Conventional Commit title
+> 2. Description of what changed
+> 3. Motivation / Why
+> 4. How to test instructions
+> 5. Testing evidence & execution logs
 > ```
 
 ---
 
 ## 🤖 AI Agent & Model
 
-- **Agent / Tool**: <!-- e.g., Antigravity, Cursor, Claude Code, GitHub Copilot, Roo Code -->
-- **Model**: <!-- e.g., Gemini 2.5 Pro, Claude 3.7 Sonnet, GPT-4o -->
+- **Agent / Tool**: <!-- e.g., Antigravity, Cursor, Claude Code, GitHub Copilot -->
+- **Model**: <!-- e.g., Gemini 3.7 Flash, Claude 3.7 Sonnet, GPT-4o -->
 
 ---
 
-## 📋 Summary of Changes
+## 📋 Description & What Changed
 
-<!-- AI-generated overview of what was added, modified, or removed, and the technical rationale. -->
-
----
-
-## 🧪 Verification & Quality Checks
-
-<!-- Summary of verification steps executed by the agent before opening this PR. -->
-
-- [ ] **Build**: `pnpm run build` completed with zero TypeScript errors.
-- [ ] **Formatting**: `pnpm run format` (`trunk fmt`) passed.
-- [ ] **Linting & Analysis**: `pnpm run check` (`trunk check`) passed with zero issues.
-- [ ] **Stdio Stream Hygiene**: Verified no `console.log()` output on `stdout` (all diagnostics go to `stderr`).
-- [ ] **Semantic PR Title**: PR title adheres to [Conventional Commits](https://www.conventionalcommits.org/).
+<!-- Concise, structured overview of what was added, modified, or removed, and the technical rationale. -->
 
 ---
 
-## 🔍 Test Evidence & Execution Logs
+## 💡 Motivation & Why
+
+<!-- Why is this change needed? What problem does it solve? -->
+
+---
+
+## 🧪 How to Test
+
+<!-- Step-by-step instructions for maintainers/reviewers to test and verify this change. -->
+
+1. `pnpm run build`
+2. ...
+
+---
+
+## 🔍 Testing Evidence & Execution Logs
 
 ```text
-<!-- Paste CLI test runs, trunk check output, or mock SSE transport verification logs here -->
+<!-- Paste execution output, test logs, or CLI runs here -->
 ```
+
+---
+
+## 🛡️ Contributor Checklist
+
+- [ ] PR Title follows **Emojified Conventional Commits** (e.g. `✨ feat: ...`, `🐛 fix: ...`).
+- [ ] TypeScript builds cleanly with `pnpm run build`.
+- [ ] Code is formatted with `pnpm run format` and passes `pnpm run check`.
+- [ ] Stdio hygiene verified (no `console.log()` to `stdout`; all diagnostics use `console.error()`).

@@ -8,11 +8,11 @@ We welcome all contributions—from bug reports and documentation improvements t
 
 ## 🤖 AI-Native Development Model
 
-This repository is designed as a premier example of **100% AI-native development**. We encourage contributors to leverage modern AI coding agents (such as Antigravity, Cursor, Claude Code, GitHub Copilot, or Gemini CLI) for planning, implementation, verification, and opening Pull Requests.
+This repository is designed as a premier model of **100% AI-native development**. We encourage contributors to leverage modern AI coding agents (such as Antigravity, Cursor, Claude Code, GitHub Copilot, or Gemini CLI) for planning, implementation, verification, and opening Pull Requests.
 
 ### How to Prompt Your AI Agent
 
-You can instruct your AI assistant directly with tasks like:
+You can instruct your AI assistant directly:
 
 ```text
 Please implement [feature/fix description].
@@ -20,7 +20,7 @@ Please implement [feature/fix description].
 2. Ensure stdout hygiene is maintained (console.error only).
 3. Run `pnpm run build`, `pnpm run format`, and `pnpm run check`.
 4. Test against the mock SSE server in `.agents/skills/mock-sse-server`.
-5. Open or draft a Pull Request with a Conventional Commit title and the template in .github/PULL_REQUEST_TEMPLATE.md.
+5. Open or draft a Pull Request with an Emojified Conventional Commit title and the template in .github/PULL_REQUEST_TEMPLATE.md.
 ```
 
 ---
@@ -33,6 +33,7 @@ Ensure you have the following installed on your machine:
 
 - **[Node.js](https://nodejs.org/)**: Version 20 LTS or later (e.g., Node 20, 22, or 24).
 - **[pnpm](https://pnpm.io/)**: Version 9 or 11 (recommended package manager).
+- **[GitHub CLI (gh)](https://cli.github.com/)**: For automated PR creation via AI.
 - **[Git](https://git-scm.com/)**
 
 ### 1. Clone the Repository
@@ -68,72 +69,89 @@ The repository follows a single-trunk workflow centered around the **`main`** br
 
 ## 📝 Commit & PR Conventions
 
-This repository strictly adheres to the [Conventional Commits](https://www.conventionalcommits.org/) specification.
+This repository strictly adheres to **Emojified Conventional Commits**.
 
 ### Why Conventional Commits?
 
 We use GitHub's **Squash and Merge** strategy. Enforcing conventional commit formats guarantees a clean, automated release history and changelog.
 
-### Commit Format
+### Format
 
 ```text
-<type>(<optional scope>): <description>
+<emoji> <type>(<optional scope>): <description>
 
 [optional body]
 
 [optional footer(s)]
 ```
 
-### Allowed Types
+### Allowed Types & Emojis
 
-| Type       | Description                                                 | Example                                         |
-| :--------- | :---------------------------------------------------------- | :---------------------------------------------- |
-| `feat`     | A new feature or capability                                 | `feat: add configurable connection timeout`     |
-| `fix`      | A bug fix                                                   | `fix: handle unexpected SSE stream termination` |
-| `docs`     | Documentation changes only                                  | `docs: add Cursor configuration instructions`   |
-| `style`    | Formatting, missing semicolons, etc. (no code logic change) | `style: format imports`                         |
-| `refactor` | Code restructuring without fixing a bug or adding a feature | `refactor: extract signal cleanup handler`      |
-| `perf`     | A code change that improves performance                     | `perf: reduce serialization latency`            |
-| `test`     | Adding or updating tests                                    | `test: add mock sse transport tests`            |
-| `build`    | Changes to build system or dependencies                     | `build: update typescript compiler target`      |
-| `ci`       | Changes to CI configuration files or scripts                | `ci: add node 24 to matrix test`                |
-| `chore`    | Routine maintenance tasks                                   | `chore: update dependencies`                    |
-| `revert`   | Reverting a previous commit                                 | `revert: undo feature flag changes`             |
+| Emoji | Type       | Description                                                 | Example                                                  |
+| :---- | :--------- | :---------------------------------------------------------- | :------------------------------------------------------- |
+| ✨    | `feat`     | A new feature or capability                                 | `✨ feat(cli): add configurable connection timeout`      |
+| 🐛    | `fix`      | A bug fix                                                   | `🐛 fix(transport): handle unexpected stream close`      |
+| 📝    | `docs`     | Documentation changes only                                  | `📝 docs(readme): add Cursor configuration instructions` |
+| 🎨    | `style`    | Formatting, missing semicolons, etc. (no code logic change) | `🎨 style: format imports`                               |
+| ♻️    | `refactor` | Code restructuring without fixing a bug or adding a feature | `♻️ refactor: extract signal cleanup handler`            |
+| 🚀    | `perf`     | A code change that improves performance                     | `🚀 perf: reduce serialization latency`                  |
+| 🧪    | `test`     | Adding or updating tests                                    | `🧪 test: add mock sse transport tests`                  |
+| 📦    | `build`    | Changes to build system or dependencies                     | `📦 build: update typescript compiler target`            |
+| 👷    | `ci`       | Changes to CI configuration files or scripts                | `👷 ci: add node 24 to matrix test`                      |
+| 🔧    | `chore`    | Routine maintenance tasks                                   | `🔧 chore: update dependencies`                          |
+| ⏪    | `revert`   | Reverting a previous commit                                 | `⏪ revert: undo feature flag changes`                   |
 
 ### Enforcement
 
 1. **Local Hook**: Every `git commit` is validated by `@commitlint` through Trunk pre-commit hooks.
-2. **PR Title Check**: Every Pull Request title is validated by GitHub Actions (`semantic-pr.yml`). Please ensure your PR title follows Conventional Commits.
+2. **PR Title Check**: Every Pull Request title is validated by GitHub Actions (`semantic-pr.yml`).
 
 ---
 
-## 🚀 Submitting a Pull Request
+## 🚀 Submitting a Pull Request (AI Flow)
 
-1. **Create your feature branch** in your fork:
+1. **Create your feature branch**:
 
    ```bash
-   git checkout -b my-feature-name
+   git checkout -b <type>/<short-description>
    ```
 
 2. **Make your changes** adhering to TypeScript strict mode and coding guidelines.
 
-3. **Format and lint your code**:
+3. **Verify quality**:
 
    ```bash
+   pnpm run build
    pnpm run format
    pnpm run check
-   pnpm run build
    ```
 
-4. **Commit your changes** with a conventional commit message:
+4. **Commit with Emojified Conventional Commit**:
 
    ```bash
-   git commit -m "feat: support custom headers in SSE connection"
+   git commit -m "✨ feat: support custom headers in SSE connection"
    ```
 
-5. **Push to your fork** and open a Pull Request against the `main` branch.
+5. **Push to remote**:
 
-6. **Generate PR with AI**: Use your AI coding agent to generate the full PR description adhering to [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md) and ensuring the PR title follows Conventional Commits.
+   ```bash
+   git push -u origin <branch-name>
+   ```
+
+6. **Create PR with rich Markdown via GitHub CLI (`gh`)**:
+
+   ```bash
+   gh pr create \
+     --title "✨ feat: support custom headers in SSE connection" \
+     --body-file .github/PULL_REQUEST_TEMPLATE.md
+   ```
+
+   Ensure your PR body includes:
+   - **🤖 AI Agent & Model**: Tool and LLM used.
+   - **📋 Description & What Changed**: Clear overview of code additions and changes.
+   - **💡 Motivation & Why**: Why this change is necessary.
+   - **🧪 How to Test**: Clear verification steps.
+   - **🔍 Testing Evidence & Execution Logs**: Terminal outputs and test runs.
 
 ---
 
