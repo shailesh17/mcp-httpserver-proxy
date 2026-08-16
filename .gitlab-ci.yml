@@ -1,19 +1,20 @@
-default:
-  image:
-    name: node:22
-    entrypoint: ['']
+image: node:22
 
 stages:
   - build
   - test
 
-variables:
-  PNPM_HOME: /root/.local/share/pnpm
-  PATH: $PNPM_HOME:$PATH
+cache:
+  key:
+    files:
+      - pnpm-lock.yaml
+  paths:
+    - .pnpm-store
 
 before_script:
   - corepack enable
   - corepack prepare pnpm@latest --activate
+  - pnpm config set store-dir .pnpm-store
   - pnpm install --frozen-lockfile
 
 build:
