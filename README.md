@@ -35,6 +35,32 @@ Here is why `mcp-httpserver-proxy` is a critical tool in your development workfl
 
 ---
 
+## 🎯 Real-World Use Cases & Scenarios
+
+Here are common real-world scenarios where `mcp-httpserver-proxy` is actively used:
+
+### 1. 🗄️ Database Explorers & Daemons (e.g., Aerospike Voyager)
+
+- **The Challenge**: Database management tools and inspectors—such as **Aerospike Voyager** or custom database MCP servers—run as persistent background daemons maintaining connection pools to database clusters. Spawning these as ephemeral `stdio` subprocesses inside Claude Desktop or Cursor is often impractical due to daemon lifecycle and process isolation.
+- **The Solution**: Run Aerospike Voyager as a persistent service exposing an SSE endpoint (e.g., `http://localhost:8080/sse`). Use `mcp-httpserver-proxy` to seamlessly bridge Claude Desktop or Cursor to the running database explorer for natural language schema inspection, key-value lookups, and query execution.
+
+### 2. 🐳 Docker Containers & DevContainers
+
+- **The Challenge**: Your MCP tools and dependencies (e.g., database clients, Python libraries, system binaries) are containerized inside Docker, WSL2, or a DevContainer where direct `stdio` process spawning from the host desktop OS is cumbersome.
+- **The Solution**: Expose the container's HTTP/SSE port (e.g., `http://localhost:3000/sse`) to your host and connect Claude Desktop with `npx mcp-httpserver-proxy http://localhost:3000/sse`.
+
+### 3. ⚡ Live Tool Authoring & Hot-Reloading
+
+- **The Challenge**: Developing new MCP tools with `stdio` requires constantly quitting and restarting Claude Desktop to test every minor code adjustment.
+- **The Solution**: Develop your MCP server using standard HTTP frameworks with live-reloading (`uvicorn app:app --reload` in Python or `tsx watch server.ts` in TypeScript). The proxy preserves the active stdio session while your server updates live.
+
+### 4. 🏢 Centralized Enterprise & Team Tool Backends
+
+- **The Challenge**: An engineering organization provides shared developer tools (e.g., Kubernetes cluster inspectors, internal service catalogs, Jira/GitLab orchestrators) hosted on an internal network or dev cluster.
+- **The Solution**: Developers connect their local Claude Desktop or Cursor directly to the internal endpoint via `npx mcp-httpserver-proxy https://mcp.internal.corp/sse` with zero local dependency installation.
+
+---
+
 ## 🏗️ Architecture & How It Works
 
 ```text
