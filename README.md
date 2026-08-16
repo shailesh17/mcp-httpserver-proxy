@@ -37,7 +37,7 @@ Here is why `mcp-httpserver-proxy` is a critical tool in your development workfl
 
 ## 🏗️ Architecture & How It Works
 
-```
+```text
 ┌───────────────────────────────┐
 │     Desktop / IDE Client      │
 │   (Claude Desktop, Cursor)    │
@@ -160,38 +160,59 @@ Examples:
 
 ---
 
-## 🛠️ Local Development & Contributing
+## 🤖 AI-Native Development & Agent Setup
 
-### Prerequisites
+This repository is built and maintained as a **100% AI-native development model**. Developers and contributors are encouraged to use AI coding agents (Antigravity, Cursor, Claude Code, GitHub Copilot, Gemini CLI) to implement features, run tests, and open Pull Requests.
 
-- **[Node.js](https://nodejs.org)** (v20+ LTS)
-- **[pnpm](https://pnpm.io/)** (`corepack enable pnpm` or `npm install -g pnpm`)
-- **[Git](https://git-scm.com/)**
+### 📚 Agent Configuration Files
 
-### Setup & Commands
+| File                                                                             | Purpose                                                       | Target Agent / Tool       |
+| :------------------------------------------------------------------------------- | :------------------------------------------------------------ | :------------------------ |
+| **[AGENTS.md](./AGENTS.md)**                                                     | Core architectural constraints, stdout rules, and PR workflow | All AI Coding Assistants  |
+| **[GEMINI.md](./GEMINI.md)**                                                     | Antigravity / Gemini IDE workspace instructions               | Antigravity, Gemini CLI   |
+| **[.github/copilot-instructions.md](./.github/copilot-instructions.md)**         | IDE coding instructions                                       | GitHub Copilot, Cursor    |
+| **[.agents/skills/create-pr/](./.agents/skills/create-pr/SKILL.md)**             | Automated PR creation runbook & rich Markdown generator       | Antigravity, AI Subagents |
+| **[.agents/skills/mock-sse-server/](./.agents/skills/mock-sse-server/SKILL.md)** | Mock SSE MCP server for local end-to-end testing              | Antigravity, AI Subagents |
+
+### 🛠️ Essential Command Flow for Developers & Agents
 
 ```bash
-# Clone the repository
-git clone https://github.com/shailesh17/mcp-httpserver-proxy.git
-cd mcp-httpserver-proxy
-
-# Install dependencies (automatically configures Git hooks via Trunk)
+# 1. Setup environment & Git hooks
 pnpm install
 
-# Compile TypeScript
+# 2. Compile TypeScript
 pnpm run build
 
-# Watch mode for iterative development
-pnpm run dev
-
-# Format code with Prettier via Trunk
+# 3. Format code (Prettier via Trunk)
 pnpm run format
 
-# Lint code with Trunk
+# 4. Lint & static analysis (Trunk check)
 pnpm run check
+
+# 5. Start mock SSE server for verification
+node .agents/skills/mock-sse-server/scripts/mock-server.js
+
+# 6. Test proxy against mock SSE server
+node dist/index.js http://127.0.0.1:8123/sse
 ```
 
-For full guidelines on our branching model, Conventional Commits standard, and PR checks, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+### 💬 Ready-to-Use Agent Prompt
+
+Copy and paste this prompt to instruct your AI assistant:
+
+```text
+Please implement [feature/fix description].
+1. Follow the guidelines in AGENTS.md (especially stdout stream hygiene).
+2. Verify with `pnpm run build`, `pnpm run format`, and `pnpm run check`.
+3. Test against the mock SSE server in `.agents/skills/mock-sse-server`.
+4. Open a Pull Request using the workflow in `.agents/skills/create-pr/SKILL.md`.
+```
+
+---
+
+## 🛠️ Local Development & Contributing
+
+For full guidelines on our single-trunk branching model, Emojified Conventional Commits standard, and automated PR verification, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ---
 
