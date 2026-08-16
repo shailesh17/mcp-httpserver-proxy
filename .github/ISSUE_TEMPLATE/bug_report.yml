@@ -1,0 +1,66 @@
+name: 🐛 Bug Report
+description: Report an issue or unexpected behavior in mcp-httpserver-proxy
+title: 'fix: '
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug! Please fill out the sections below so we can diagnose and resolve the problem.
+
+  - type: input
+    id: version
+    attributes:
+      label: Proxy Version
+      description: What version of mcp-httpserver-proxy are you using? (Run `npx mcp-httpserver-proxy --version` or check `package.json`)
+      placeholder: e.g., 1.0.0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: client
+    attributes:
+      label: MCP Client
+      description: Which client is connecting through the proxy?
+      options:
+        - Claude Desktop
+        - Cursor
+        - VS Code (Cline / Roo Code)
+        - Zed
+        - Other (specify in description)
+    validations:
+      required: true
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js Version & OS
+      description: Output of `node -v` and your operating system (macOS / Linux / Windows).
+      placeholder: e.g., Node v20.14.0 on macOS Sonoma 14.5
+    validations:
+      required: true
+
+  - type: textarea
+    id: sse-server
+    attributes:
+      label: Target MCP Server Description
+      description: What framework or technology runs the target HTTP/SSE server? (e.g., Python FastAPI, Express, custom)
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem Description
+      description: Describe what happened and what you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs (stderr)
+      description: Paste any relevant logs from stderr or Claude Desktop log files.
+      render: shell
+    validations:
+      required: false
