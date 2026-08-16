@@ -18,19 +18,19 @@
   </a>
 </p>
 
-A lightweight, high-performance transparent proxy that bridges [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) servers operating over HTTP with Server-Sent Events (SSE) to desktop and editor AI clients (such as **Claude Desktop** and **Cursor**) communicating over standard input/output (`stdio`).
+A lightweight, high-performance transparent proxy that bridges [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) servers operating over HTTP with Server-Sent Events (SSE) to desktop and editor AI clients (such as [Claude Desktop](https://claude.ai/download) and [Cursor](https://www.cursor.com/)) communicating over standard input/output (`stdio`).
 
 ---
 
 ## 💡 Why This Proxy is Essential for Local Tools & Development
 
-Desktop MCP clients (like Claude Desktop and Cursor) are primarily built around spawning local subprocesses communicating via `stdio`. However, real-world development workflows and modern microservices frequently favor HTTP/SSE transports.
+Desktop MCP clients (like [Claude Desktop](https://claude.ai/download) and [Cursor](https://www.cursor.com/)) are primarily built around spawning local subprocesses communicating via `stdio`. However, real-world development workflows and modern microservices frequently favor HTTP/SSE transports.
 
 Here is why `mcp-httpserver-proxy` is a critical tool in your development workflow:
 
-- **🔥 Seamless Hot-Reloading & Rapid Iteration**: When an MCP server is spawned as a raw `stdio` subprocess inside Claude Desktop, editing your tool code requires completely restarting Claude Desktop to reload the subprocess. With this proxy, you can run your MCP server as a standalone HTTP/SSE service with hot-reloading (e.g., `nodemon`, `tsx watch`, or `uvicorn --reload`). You iterate instantly without interrupting your LLM session.
-- **🌐 Shared Local & Containerized Backends**: Run a single local or containerized MCP server (e.g., in Docker, Kubernetes, or DevContainers) hosting database inspectors, filesystem tools, or custom APIs, and bridge it simultaneously to multiple client instances or editors.
-- **🚀 Cross-Language Ecosystems**: Build MCP servers in any language or web framework (Python/FastAPI, Go, Rust, C#, Java, Node/Express) and connect them effortlessly to desktop clients without dealing with OS-level subprocess spawn quirks.
+- **🔥 Seamless Hot-Reloading & Rapid Iteration**: When an MCP server is spawned as a raw `stdio` subprocess inside Claude Desktop, editing your tool code requires completely restarting Claude Desktop to reload the subprocess. With this proxy, you can run your MCP server as a standalone HTTP/SSE service with hot-reloading (e.g., [nodemon](https://nodemon.io/), [tsx watch](https://github.com/privatenumber/tsx), or [uvicorn --reload](https://www.uvicorn.org/)). You iterate instantly without interrupting your LLM session.
+- **🌐 Shared Local & Containerized Backends**: Run a single local or containerized MCP server (e.g., in [Docker](https://www.docker.com/), Kubernetes, or [DevContainers](https://containers.dev/)) hosting database inspectors, filesystem tools, or custom APIs, and bridge it simultaneously to multiple client instances or editors.
+- **🚀 Cross-Language Ecosystems**: Build MCP servers in any language or web framework ([Python/FastAPI](https://fastapi.tiangolo.com/), Go, Rust, C#, Java, Node/Express) and connect them effortlessly to desktop clients without dealing with OS-level subprocess spawn quirks.
 - **☁️ Remote & Networked Environments**: Connect your local Claude Desktop to MCP servers running on remote dev boxes, cloud instances, or internal networks over an HTTP/SSE endpoint.
 
 ---
@@ -41,12 +41,12 @@ Here are common real-world scenarios where `mcp-httpserver-proxy` is actively us
 
 ### 1. 🗄️ Database Explorers & Daemons (e.g., Aerospike Voyager)
 
-- **The Challenge**: Database management tools and inspectors—such as **Aerospike Voyager** or custom database MCP servers—run as persistent background daemons maintaining connection pools to database clusters. Spawning these as ephemeral `stdio` subprocesses inside Claude Desktop or Cursor is often impractical due to daemon lifecycle and process isolation.
+- **The Challenge**: Database management tools and inspectors—such as [Aerospike Voyager](https://aerospike.com/docs/tools/voyager/) or custom database MCP servers—run as persistent background daemons maintaining connection pools to database clusters. Spawning these as ephemeral `stdio` subprocesses inside Claude Desktop or Cursor is often impractical due to daemon lifecycle and process isolation.
 - **The Solution**: Run Aerospike Voyager as a persistent service exposing an SSE endpoint (e.g., `http://localhost:8080/sse`). Use `mcp-httpserver-proxy` to seamlessly bridge Claude Desktop or Cursor to the running database explorer for natural language schema inspection, key-value lookups, and query execution.
 
 ### 2. 🐳 Docker Containers & DevContainers
 
-- **The Challenge**: Your MCP tools and dependencies (e.g., database clients, Python libraries, system binaries) are containerized inside Docker, WSL2, or a DevContainer where direct `stdio` process spawning from the host desktop OS is cumbersome.
+- **The Challenge**: Your MCP tools and dependencies (e.g., database clients, Python libraries, system binaries) are containerized inside [Docker](https://www.docker.com/), WSL2, or a [DevContainer](https://containers.dev/) where direct `stdio` process spawning from the host desktop OS is cumbersome.
 - **The Solution**: Expose the container's HTTP/SSE port (e.g., `http://localhost:3000/sse`) to your host and connect Claude Desktop with `npx mcp-httpserver-proxy http://localhost:3000/sse`.
 
 ### 3. ⚡ Live Tool Authoring & Hot-Reloading
@@ -140,7 +140,7 @@ Add the proxy to your `claude_desktop_config.json`:
 
 ### 2. Cursor IDE
 
-In Cursor, configure your MCP server settings in `~/.cursor/mcp.json` or your project's `.cursor/mcp.json`:
+In [Cursor](https://www.cursor.com/), configure your MCP server settings in `~/.cursor/mcp.json` or your project's `.cursor/mcp.json`:
 
 ```json
 {
@@ -155,7 +155,7 @@ In Cursor, configure your MCP server settings in `~/.cursor/mcp.json` or your pr
 
 ### 3. VS Code / Cline / Roo Code
 
-Add to your MCP settings file:
+In [VS Code](https://code.visualstudio.com/) with [Cline](https://github.com/cline/cline) or [Roo Code](https://github.com/RooVetGit/Roo-Code), add to your MCP settings file:
 
 ```json
 {
@@ -188,7 +188,7 @@ Examples:
 
 ## 🤖 AI-Native Development & Agent Setup
 
-This repository is built and maintained as a **100% AI-native development model**. Developers and contributors are encouraged to use AI coding agents (Antigravity, Cursor, Claude Code, GitHub Copilot, Gemini CLI) to implement features, run tests, and open Pull Requests.
+This repository is built and maintained as a **100% AI-native development model**. Developers and contributors are encouraged to use AI coding agents ([Antigravity](https://github.com/shailesh17/mcp-httpserver-proxy), [Cursor](https://www.cursor.com/), [Claude Code](https://claude.ai/), [GitHub Copilot](https://github.com/features/copilot), [Gemini CLI](https://ai.google.dev/)) to implement features, run tests, and open Pull Requests.
 
 ### 📚 Agent Configuration Files
 
