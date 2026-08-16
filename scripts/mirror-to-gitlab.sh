@@ -30,10 +30,14 @@ echo "================================================================="
 echo "🦊 Mirroring Repository to GitLab: ${FULL_TARGET}"
 echo "================================================================="
 
-# Create repository on GitLab if it doesn't exist yet (via glab)
+# Create repository on GitLab only if it doesn't exist yet (via glab)
 if command -v glab &>/dev/null; then
-  echo "🔍 Ensuring repository exists on GitLab..."
-  glab repo create "${FULL_TARGET}" --public || true
+  if ! glab repo view "${FULL_TARGET}" &>/dev/null; then
+    echo "🔍 Creating repository on GitLab: ${FULL_TARGET}..."
+    glab repo create "${FULL_TARGET}" --public || true
+  else
+    echo "✔ Repository already exists on GitLab: ${FULL_TARGET}"
+  fi
 fi
 
 # Configure gitlab remote
