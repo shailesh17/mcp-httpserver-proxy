@@ -18,6 +18,10 @@
   </a>
 </p>
 
+<p align="center">
+  <img src="./assets/social-preview.jpg" alt="MCP HTTP Server Proxy Banner" width="100%" />
+</p>
+
 A lightweight, high-performance transparent proxy that bridges [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) servers operating over HTTP with Server-Sent Events (SSE) to desktop and editor AI clients (such as [Claude Desktop](https://claude.ai/download) and [Cursor](https://www.cursor.com/)) communicating over standard input/output (`stdio`).
 
 ---
@@ -238,7 +242,7 @@ Please implement [feature/fix description].
 
 ## 🛠️ Local Development & Contributing
 
-For full guidelines on our single-trunk branching model, Emojified Conventional Commits standard, and automated PR verification, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+For full guidelines on our single-trunk branching model, Conventional Commits standard, and automated PR verification, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ---
 

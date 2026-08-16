@@ -41,9 +41,9 @@ The primary entry point is `src/index.ts`, which compiles to `dist/index.js` as 
 
 ### 4. Git & Commit Standards
 
-- All commit messages and PR titles must follow **Emojified Conventional Commits**:
-  - Format: `<emoji> <type>(<scope>): <description>`
-  - Types: `✨ feat`, `🐛 fix`, `📝 docs`, `🎨 style`, `♻️ refactor`, `🚀 perf`, `🧪 test`, `📦 build`, `👷 ci`, `🔧 chore`, `⏪ revert`.
+- All commit messages and PR titles must follow **Conventional Commits**:
+  - Format: `<type>(<scope>): <description>`
+  - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
 - Commits are verified locally via Trunk git hooks (`commitlint`).
 - PR titles are verified in CI via GitHub Actions (`semantic-pr.yml`).
 
@@ -57,7 +57,7 @@ When instructed to open a Pull Request, use the [create-pr skill](.agents/skills
 2. **Testing**: Run mock SSE verification if transport was touched (`node .agents/skills/mock-sse-server/scripts/mock-server.js`).
 3. **Branch & Push**: Create a feature branch and push to remote (`git push -u origin <branch>`).
 4. **Open PR via `gh pr create`**:
-   - **Title**: Emojified Conventional Commit (e.g. `✨ feat(cli): add version and help flags`).
+   - **Title**: Conventional Commit (e.g. `feat(cli): add version and help flags`).
    - **Body**: Rich Markdown format including:
      - `📋 Description & What Changed`
      - `💡 Motivation & Why`

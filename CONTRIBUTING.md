@@ -78,28 +78,28 @@ We use GitHub's **Squash and Merge** strategy. Enforcing conventional commit for
 ### Format
 
 ```text
-<emoji> <type>(<optional scope>): <description>
+<type>(<optional scope>): <description>
 
 [optional body]
 
 [optional footer(s)]
 ```
 
-### Allowed Types & Emojis
+### Allowed Types
 
-| Emoji | Type       | Description                                                 | Example                                                  |
-| :---- | :--------- | :---------------------------------------------------------- | :------------------------------------------------------- |
-| ✨    | `feat`     | A new feature or capability                                 | `✨ feat(cli): add configurable connection timeout`      |
-| 🐛    | `fix`      | A bug fix                                                   | `🐛 fix(transport): handle unexpected stream close`      |
-| 📝    | `docs`     | Documentation changes only                                  | `📝 docs(readme): add Cursor configuration instructions` |
-| 🎨    | `style`    | Formatting, missing semicolons, etc. (no code logic change) | `🎨 style: format imports`                               |
-| ♻️    | `refactor` | Code restructuring without fixing a bug or adding a feature | `♻️ refactor: extract signal cleanup handler`            |
-| 🚀    | `perf`     | A code change that improves performance                     | `🚀 perf: reduce serialization latency`                  |
-| 🧪    | `test`     | Adding or updating tests                                    | `🧪 test: add mock sse transport tests`                  |
-| 📦    | `build`    | Changes to build system or dependencies                     | `📦 build: update typescript compiler target`            |
-| 👷    | `ci`       | Changes to CI configuration files or scripts                | `👷 ci: add node 24 to matrix test`                      |
-| 🔧    | `chore`    | Routine maintenance tasks                                   | `🔧 chore: update dependencies`                          |
-| ⏪    | `revert`   | Reverting a previous commit                                 | `⏪ revert: undo feature flag changes`                   |
+| Type       | Description                                                 | Example                                                  |
+| :--------- | :---------------------------------------------------------- | :------------------------------------------------------- |
+| `feat`     | A new feature or capability                                 | `feat(cli): add configurable connection timeout ✨`      |
+| `fix`      | A bug fix                                                   | `fix(transport): handle unexpected stream close 🐛`      |
+| `docs`     | Documentation changes only                                  | `docs(readme): add Cursor configuration instructions 📝` |
+| `style`    | Formatting, missing semicolons, etc. (no code logic change) | `style: format imports 🎨`                               |
+| `refactor` | Code restructuring without fixing a bug or adding a feature | `refactor: extract signal cleanup handler ♻️`            |
+| `perf`     | A code change that improves performance                     | `perf: reduce serialization latency 🚀`                  |
+| `test`     | Adding or updating tests                                    | `test: add mock sse transport tests 🧪`                  |
+| `build`    | Changes to build system or dependencies                     | `build: update typescript compiler target 📦`            |
+| `ci`       | Changes to CI configuration files or scripts                | `ci: add node 24 to matrix test 👷`                      |
+| `chore`    | Routine maintenance tasks                                   | `chore: update dependencies 🔧`                          |
+| `revert`   | Reverting a previous commit                                 | `revert: undo feature flag changes ⏪`                   |
 
 ### Enforcement
 
@@ -126,10 +126,10 @@ We use GitHub's **Squash and Merge** strategy. Enforcing conventional commit for
    pnpm run check
    ```
 
-4. **Commit with Emojified Conventional Commit**:
+4. **Commit with Conventional Commit**:
 
    ```bash
-   git commit -m "✨ feat: support custom headers in SSE connection"
+   git commit -m "feat: support custom headers in SSE connection"
    ```
 
 5. **Push to remote**:
@@ -142,7 +142,7 @@ We use GitHub's **Squash and Merge** strategy. Enforcing conventional commit for
 
    ```bash
    gh pr create \
-     --title "✨ feat: support custom headers in SSE connection" \
+     --title "feat: support custom headers in SSE connection" \
      --body-file .github/PULL_REQUEST_TEMPLATE.md
    ```
 
