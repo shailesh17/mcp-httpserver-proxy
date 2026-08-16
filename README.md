@@ -39,10 +39,10 @@ Here is why `mcp-httpserver-proxy` is a critical tool in your development workfl
 
 Here are common real-world scenarios where `mcp-httpserver-proxy` is actively used:
 
-### 1. 🗄️ Database Explorers & Daemons (e.g., Aerospike Voyager)
+### 1. 🗄️ Database Explorers & GUI Workspaces (e.g., Aerospike Voyager)
 
-- **The Challenge**: Database management tools and inspectors—such as [Aerospike Voyager](https://aerospike.com/docs/tools/voyager/) or custom database MCP servers—run as persistent background daemons maintaining connection pools to database clusters. Spawning these as ephemeral `stdio` subprocesses inside Claude Desktop or Cursor is often impractical due to daemon lifecycle and process isolation.
-- **The Solution**: Run Aerospike Voyager as a persistent service exposing an SSE endpoint (e.g., `http://localhost:8080/sse`). Use `mcp-httpserver-proxy` to seamlessly bridge Claude Desktop or Cursor to the running database explorer for natural language schema inspection, key-value lookups, and query execution.
+- **The Challenge**: [Aerospike Voyager](https://aerospike.com/docs/tools/voyager/) is an interactive desktop developer workspace for browsing, querying, and managing Aerospike database clusters. Voyager includes a built-in embedded MCP server that operates over **HTTP with Server-Sent Events (SSE)** (typically at `http://localhost:9090/sse`). However, **Claude Desktop cannot natively connect to HTTP/SSE endpoints**—it strictly requires MCP servers to be spawned as local command-line subprocesses over `stdio`. Spawning Voyager itself via `stdio` is impractical because it wouldn't share the active database connection, authentication state, or UI context of your running desktop application.
+- **The Solution**: Keep Aerospike Voyager running as your active database GUI with its MCP HTTP/SSE server enabled. Configure Claude Desktop to run `npx mcp-httpserver-proxy http://localhost:9090/sse`. The proxy connects over SSE to your live Voyager application while exposing a standard `stdio` interface to Claude Desktop—enabling natural language database queries, schema exploration, and Aerospike Expression Language (AEL) generation directly in your chat.
 
 ### 2. 🐳 Docker Containers & DevContainers
 
