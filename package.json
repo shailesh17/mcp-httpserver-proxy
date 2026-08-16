@@ -42,7 +42,7 @@
   },
   "homepage": "https://github.com/shailesh17/mcp-httpserver-proxy#readme",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.13.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.1"

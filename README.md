@@ -8,7 +8,7 @@
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
   </a>
   <a href="https://nodejs.org">
-    <img src="https://img.shields.io/badge/Node.js-%3E%3D20.0.0-brightgreen.svg" alt="Node.js Version" />
+    <img src="https://img.shields.io/badge/Node.js-%3E%3D22.13.0-brightgreen.svg" alt="Node.js Version" />
   </a>
   <a href="https://pnpm.io">
     <img src="https://img.shields.io/badge/pnpm-11.x-orange.svg" alt="pnpm" />

@@ -31,7 +31,7 @@ Please implement [feature/fix description].
 
 Ensure you have the following installed on your machine:
 
-- **[Node.js](https://nodejs.org/)**: Version 20 LTS or later (e.g., Node 20, 22, or 24).
+- **[Node.js](https://nodejs.org/)**: Version 22 LTS or later (e.g., Node 22 or Node 24).
 - **[pnpm](https://pnpm.io/)**: Version 9 or 11 (recommended package manager).
 - **[GitHub CLI (gh)](https://cli.github.com/)**: For automated PR creation via AI.
 - **[Git](https://git-scm.com/)**
