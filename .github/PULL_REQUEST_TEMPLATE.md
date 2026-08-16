@@ -19,13 +19,6 @@
 
 ---
 
-## 🤖 AI Agent & Model
-
-- **Agent / Tool**: <!-- e.g., Antigravity, Cursor, Claude Code, GitHub Copilot -->
-- **Model**: <!-- e.g., Gemini 3.7 Flash, Claude 3.7 Sonnet, GPT-4o -->
-
----
-
 ## 📋 Description & What Changed
 
 <!-- Concise, structured overview of what was added, modified, or removed, and the technical rationale. -->
@@ -52,6 +45,13 @@
 ```text
 <!-- Paste execution output, test logs, or CLI runs here -->
 ```
+
+---
+
+## 🤖 AI Agent & Model
+
+- **Agent / Tool**: <!-- e.g., Antigravity, Cursor, Claude Code, GitHub Copilot -->
+- **Model**: <!-- e.g., Gemini 3.7 Flash, Claude 3.7 Sonnet, GPT-4o -->
 
 ---
 

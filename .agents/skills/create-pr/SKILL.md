@@ -100,12 +100,6 @@ gh pr create \
   --body "$(cat <<'EOF'
 # Pull Request
 
-## 🤖 AI Agent & Model
-- **Agent / Tool**: Antigravity
-- **Model**: Gemini 3.7 Flash
-
----
-
 ## 📋 Description & What Changed
 - Added `-h` / `--help` and `-v` / `--version` CLI flags.
 - Implemented `SIGINT` and `SIGTERM` signal handlers for graceful connection cleanup.
@@ -135,6 +129,12 @@ Checked 24 modified files
 $ node dist/index.js http://127.0.0.1:8123/sse
 Proxy running. Connected to http://127.0.0.1:8123/sse
 ```
+
+---
+
+## 🤖 AI Agent & Model
+- **Agent / Tool**: Antigravity
+- **Model**: Gemini 3.7 Flash
 
 ---
 

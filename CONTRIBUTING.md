@@ -147,11 +147,11 @@ We use GitHub's **Squash and Merge** strategy. Enforcing conventional commit for
    ```
 
    Ensure your PR body includes:
-   - **🤖 AI Agent & Model**: Tool and LLM used.
    - **📋 Description & What Changed**: Clear overview of code additions and changes.
    - **💡 Motivation & Why**: Why this change is necessary.
    - **🧪 How to Test**: Clear verification steps.
    - **🔍 Testing Evidence & Execution Logs**: Terminal outputs and test runs.
+   - **🤖 AI Agent & Model**: Tool and LLM used.
 
 ---
 

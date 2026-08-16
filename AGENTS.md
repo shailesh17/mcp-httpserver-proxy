@@ -59,11 +59,11 @@ When instructed to open a Pull Request, use the [create-pr skill](.agents/skills
 4. **Open PR via `gh pr create`**:
    - **Title**: Emojified Conventional Commit (e.g. `✨ feat(cli): add version and help flags`).
    - **Body**: Rich Markdown format including:
-     - `🤖 AI Agent & Model`
      - `📋 Description & What Changed`
      - `💡 Motivation & Why`
      - `🧪 How to Test`
      - `🔍 Testing Evidence & Execution Logs`
+     - `🤖 AI Agent & Model`
      - `🛡️ Contributor Checklist`
 
 ---
