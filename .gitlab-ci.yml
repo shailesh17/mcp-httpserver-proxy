@@ -1,0 +1,27 @@
+image: node:22-alpine
+
+stages:
+  - build
+  - test
+
+variables:
+  PNPM_HOME: /root/.local/share/pnpm
+  PATH: $PNPM_HOME:$PATH
+
+before_script:
+  - corepack enable
+  - corepack prepare pnpm@latest --activate
+  - pnpm install --frozen-lockfile
+
+build:
+  stage: build
+  script:
+    - pnpm run build
+  artifacts:
+    paths:
+      - dist/
+
+test:
+  stage: test
+  script:
+    - pnpm run build
