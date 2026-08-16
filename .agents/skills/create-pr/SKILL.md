@@ -1,7 +1,7 @@
 ---
 name: create-pr
 description: >-
-  Automated end-to-end workflow to verify, format, test, push, and open a polished, AI-native Pull Request using GitHub CLI (gh) with emojified Conventional Commits and rich markdown formatting.
+  Automated end-to-end workflow to verify, format, test, push, and open a polished, AI-native Pull Request using GitHub CLI (gh) with Conventional Commits and rich markdown formatting.
 ---
 
 # Create PR Skill
@@ -10,27 +10,27 @@ Use this skill when you need to prepare, verify, push, and create a Pull Request
 
 ---
 
-## 📋 Standard PR Title Format (Emojified Conventional Commit)
+## 📋 Standard PR Title Format (Conventional Commits)
 
-All Pull Request titles must follow the **emojified Conventional Commit** pattern:
+All Pull Request titles and commit messages must follow the standard **Conventional Commit** pattern:
 
-`<emoji> <type>(<optional-scope>): <description>`
+`<type>(<optional-scope>): <description>`
 
-### Emoji Mapping Reference
+### Type Reference
 
-| Emoji | Conventional Type | Usage                                   | Example                                                |
-| :---- | :---------------- | :-------------------------------------- | :----------------------------------------------------- |
-| ✨    | `feat`            | New feature or capability               | `✨ feat(cli): add interactive options and help flag`  |
-| 🐛    | `fix`             | Bug fix or error resolution             | `🐛 fix(transport): prevent message drop during init`  |
-| 📝    | `docs`            | Documentation changes                   | `📝 docs(readme): add Cursor and VS Code setup guides` |
-| 🎨    | `style`           | Formatting or styling adjustments       | `🎨 style: standardize TypeScript import order`        |
-| ♻️    | `refactor`        | Code restructuring without logic change | `♻️ refactor(proxy): extract signal cleanup handlers`  |
-| 🚀    | `perf`            | Performance improvement                 | `🚀 perf(sse): optimize message serialization`         |
-| 🧪    | `test`            | Adding or updating tests                | `🧪 test: add mock SSE server end-to-end suite`        |
-| 📦    | `build`           | Build system or dependency updates      | `📦 build: update TypeScript target to ES2022`         |
-| 👷    | `ci`              | CI/CD workflow updates                  | `👷 ci: add Node 24 matrix test and semantic PR check` |
-| 🔧    | `chore`           | Tooling, configs, or maintenance        | `🔧 chore(trunk): track .trunk configs in Git`         |
-| ⏪    | `revert`          | Reverting a previous commit             | `⏪ revert: undo experimental stream buffer`           |
+| Type       | Description                             | Example                                                |
+| :--------- | :-------------------------------------- | :----------------------------------------------------- |
+| `feat`     | New feature or capability               | `feat(cli): add interactive options and help flag ✨`  |
+| `fix`      | Bug fix or error resolution             | `fix(transport): prevent message drop during init 🐛`  |
+| `docs`     | Documentation changes                   | `docs(readme): add Cursor and VS Code setup guides 📝` |
+| `style`    | Formatting or styling adjustments       | `style: standardize TypeScript import order 🎨`        |
+| `refactor` | Code restructuring without logic change | `refactor(proxy): extract signal cleanup handlers ♻️`  |
+| `perf`     | Performance improvement                 | `perf(sse): optimize message serialization 🚀`         |
+| `test`     | Adding or updating tests                | `test: add mock SSE server end-to-end suite 🧪`        |
+| `build`    | Build system or dependency updates      | `build: update TypeScript target to ES2022 📦`         |
+| `ci`       | CI/CD workflow updates                  | `ci: add Node 24 matrix test and semantic PR check 👷` |
+| `chore`    | Tooling, configs, or maintenance        | `chore(trunk): track .trunk configs in Git 🔧`         |
+| `revert`   | Reverting a previous commit             | `revert: undo experimental stream buffer ⏪`           |
 
 ---
 
@@ -70,7 +70,7 @@ Capture the execution logs to include in the PR description under **Testing Evid
 
 ### Step 3: Git Branch & Push
 
-1. Ensure changes are committed with Conventional Commit messages.
+1. Ensure changes are committed with Conventional Commit messages (`type(scope): description`).
 
 2. Check current branch:
 
@@ -92,11 +92,11 @@ Capture the execution logs to include in the PR description under **Testing Evid
 
 ### Step 4: Create Pull Request with GitHub CLI (`gh`)
 
-Use `gh pr create` with the emojified title and a rich Markdown body adhering to the template below:
+Use `gh pr create` with the Conventional Commit title and rich Markdown body adhering to the template below:
 
 ````bash
 gh pr create \
-  --title "✨ feat(cli): add interactive options and help flag" \
+  --title "feat(cli): add interactive options and help flag" \
   --body "$(cat <<'EOF'
 # Pull Request
 
@@ -139,7 +139,7 @@ Proxy running. Connected to http://127.0.0.1:8123/sse
 ---
 
 ## 🛡️ Contributor Checklist
-- [x] PR Title follows Emojified Conventional Commits.
+- [x] PR Title follows Conventional Commits (`type(scope): description`).
 - [x] TypeScript builds cleanly with `pnpm run build`.
 - [x] Code is formatted with `pnpm run format` and passes `pnpm run check`.
 - [x] Zero `console.log()` calls to `stdout` (diagnostics use `console.error()`).

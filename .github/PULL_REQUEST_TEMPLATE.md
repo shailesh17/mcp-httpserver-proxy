@@ -3,14 +3,14 @@
 > **🤖 AI-Native Contribution Flow**
 > This repository uses AI coding agents to build, test, and open Pull Requests.
 >
-> **PR Title Format**: `<emoji> <type>(<scope>): <description>` (e.g. `✨ feat(cli): add help and version flags`)
+> **PR Title Format**: `<type>(<optional-scope>): <description>` (e.g. `feat(cli): add help and version flags` or `docs(readme): add hero banner ✨`)
 >
 > **Agent Prompt**:
 >
 > ```text
 > Review the diff against `main`, run `pnpm run build`, `pnpm run format`, and `pnpm run check`.
 > Then generate a complete Pull Request using the repository template with:
-> 1. Emojified Conventional Commit title
+> 1. Standard Conventional Commit title (type(scope): description)
 > 2. Description of what changed
 > 3. Motivation / Why
 > 4. How to test instructions

@@ -242,7 +242,7 @@ Please implement [feature/fix description].
 
 ## 🛠️ Local Development & Contributing
 
-For full guidelines on our single-trunk branching model, Emojified Conventional Commits standard, and automated PR verification, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+For full guidelines on our single-trunk branching model, Conventional Commits standard, and automated PR verification, see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ---
 
