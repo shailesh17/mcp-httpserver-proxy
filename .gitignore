@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.trunk/
+!.trunk/trunk.yaml
+.DS_Store
+.env
