@@ -40,6 +40,9 @@ jobs:
       - name: Build TypeScript
         run: pnpm run build
 
+      - name: Run Tests
+        run: pnpm test
+
   lint-and-format:
     name: Trunk Check & Lint
     runs-on: ubuntu-latest
