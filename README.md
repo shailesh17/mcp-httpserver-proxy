@@ -189,13 +189,17 @@ In [Cursor](https://www.cursor.com/), configure your MCP server settings in `~/.
 Usage: mcp-httpserver-proxy <mcp-server-sse-url> [options]
 
 Options:
-  -H, --header <name: value>  Custom HTTP request header (can be repeated)
-  -h, --help                  Show help information
-  -v, --version               Show version number
+  -H, --header <name: value>   Custom HTTP request header (can be repeated)
+  -r, --retries <count>        Number of connection attempts on startup (default: 3)
+  -d, --retry-delay <ms>       Base retry delay in milliseconds (default: 1000)
+  -h, --help                   Show help information
+  -v, --version                Show version number
 
 Environment Variables:
-  MCP_PROXY_HEADERS           JSON string of key-value header pairs
-                              Example: '{"Authorization": "Bearer secret"}'
+  MCP_PROXY_HEADERS            JSON string of key-value header pairs
+                               Example: '{"Authorization": "Bearer secret"}'
+  MCP_PROXY_RETRIES            Number of connection attempts (default: 3)
+  MCP_PROXY_RETRY_DELAY        Base retry delay in milliseconds (default: 1000)
 
 Examples:
   # Basic connection
@@ -206,6 +210,9 @@ Examples:
 
   # Multiple headers
   mcp-httpserver-proxy https://api.example.com/sse -H "X-Api-Key: 123" -H "X-Tenant-ID: acme"
+
+  # Resilient retries for delayed backend startup / Docker containers
+  mcp-httpserver-proxy http://localhost:8080/sse --retries 5 --retry-delay 2000
 ```
 
 ---
