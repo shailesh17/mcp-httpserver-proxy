@@ -1,99 +1,63 @@
 #!/usr/bin/env node
 
-import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { JSONRPCMessage } from '@modelcontextprotocol/sdk/types.js';
-import { resolveHeaders } from './headers.js';
+import { parseConfig } from './config.js';
+import { connectWithRetry } from './retry.js';
 
 function printUsage(): void {
   console.error('Usage: mcp-httpserver-proxy <mcp-server-sse-url> [options]');
   console.error('');
   console.error('Options:');
-  console.error('  -H, --header <name: value>  Custom HTTP request header (can be repeated)');
-  console.error('  -h, --help                  Show help information');
-  console.error('  -v, --version               Show version number');
+  console.error('  -H, --header <name: value>   Custom HTTP request header (can be repeated)');
+  console.error(
+    '  -r, --retries <count>        Number of connection attempts on startup (default: 3)',
+  );
+  console.error('  -d, --retry-delay <ms>       Base retry delay in milliseconds (default: 1000)');
+  console.error('  -h, --help                   Show help information');
+  console.error('  -v, --version                Show version number');
   console.error('');
   console.error('Environment Variables:');
-  console.error('  MCP_PROXY_HEADERS           JSON string of key-value header pairs');
-  console.error('                              Example: \'{"Authorization": "Bearer secret"}\'');
+  console.error('  MCP_PROXY_HEADERS            JSON string of key-value header pairs');
+  console.error('                               Example: \'{"Authorization": "Bearer secret"}\'');
+  console.error('  MCP_PROXY_RETRIES            Number of connection attempts (default: 3)');
+  console.error('  MCP_PROXY_RETRY_DELAY        Base retry delay in milliseconds (default: 1000)');
   console.error('');
   console.error('Examples:');
   console.error('  mcp-httpserver-proxy http://localhost:8080/sse');
   console.error(
     '  mcp-httpserver-proxy https://api.example.com/sse -H "Authorization: Bearer secret"',
   );
-  console.error(
-    '  mcp-httpserver-proxy https://api.example.com/sse -H "X-Api-Key: 123" -H "X-Tenant-ID: acme"',
-  );
+  console.error('  mcp-httpserver-proxy http://localhost:8080/sse --retries 5 --retry-delay 2000');
 }
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
-  let sseUrlString: string | undefined;
-  const cliHeaders: string[] = [];
+  let config;
 
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-
-    if (arg === '--help' || arg === '-h') {
-      printUsage();
-      process.exit(0);
-    }
-
-    if (arg === '--version' || arg === '-v') {
-      console.error('mcp-httpserver-proxy v1.0.0');
-      process.exit(0);
-    }
-
-    if (arg === '-H' || arg === '--header') {
-      if (i + 1 >= args.length) {
-        console.error(
-          `Error: Option '${arg}' requires an argument in format "Header-Name: Header-Value"`,
-        );
-        printUsage();
-        process.exit(1);
-      }
-      cliHeaders.push(args[++i]);
-    } else if (arg.startsWith('-H=')) {
-      cliHeaders.push(arg.slice(3));
-    } else if (arg.startsWith('--header=')) {
-      cliHeaders.push(arg.slice(9));
-    } else if (arg.startsWith('-')) {
-      console.error(`Unknown option: ${arg}`);
-      printUsage();
-      process.exit(1);
-    } else {
-      if (!sseUrlString) {
-        sseUrlString = arg;
-      } else {
-        console.error(`Unexpected extra positional argument: ${arg}`);
-        printUsage();
-        process.exit(1);
-      }
-    }
-  }
-
-  if (!sseUrlString) {
-    console.error('Error: Missing required <mcp-server-sse-url> argument.');
-    printUsage();
-    process.exit(1);
-  }
-
-  let sseUrl: URL;
   try {
-    sseUrl = new URL(sseUrlString);
-  } catch (_err) {
-    console.error(`Invalid URL provided: ${sseUrlString}`);
-    printUsage();
-    process.exit(1);
-  }
-
-  let headers: Record<string, string>;
-  try {
-    headers = resolveHeaders(cliHeaders, process.env.MCP_PROXY_HEADERS);
+    config = parseConfig(args, process.env);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    console.error(`Header configuration error: ${msg}`);
+    console.error(`Error: ${msg}`);
+    printUsage();
+    process.exit(1);
+  }
+
+  if (config.isHelp) {
+    printUsage();
+    process.exit(0);
+  }
+
+  if (config.isVersion) {
+    console.error('mcp-httpserver-proxy v1.0.0');
+    process.exit(0);
+  }
+
+  const { sseUrl, headers, retries, retryDelayMs } = config;
+  if (!sseUrl) {
+    console.error('Error: Missing required <mcp-server-sse-url> argument.');
+    printUsage();
     process.exit(1);
   }
 
@@ -105,17 +69,13 @@ async function main(): Promise<void> {
   // Claude Desktop / Cursor uses stdio to communicate with this proxy (Proxy acts as the "Server")
   const stdioTransport = new StdioServerTransport();
 
-  // Proxy uses SSE to communicate with the real MCP Server (Proxy acts as the "Client")
-  const sseTransport = new SSEClientTransport(sseUrl, {
-    requestInit: customHeadersCount > 0 ? { headers } : undefined,
-  });
-
   let sseStarted = false;
   let stdioStarted = false;
+  let sseTransport: any = null;
 
   const cleanup = async (): Promise<void> => {
     try {
-      if (sseStarted) {
+      if (sseStarted && sseTransport) {
         await sseTransport.close();
       }
     } catch (e) {
@@ -143,10 +103,29 @@ async function main(): Promise<void> {
     process.exit(0);
   });
 
+  // Connect to SSE backend with resilient retry logic
+  try {
+    sseTransport = await connectWithRetry(
+      sseUrl,
+      {
+        requestInit: customHeadersCount > 0 ? { headers } : undefined,
+      },
+      {
+        maxAttempts: retries,
+        baseDelayMs: retryDelayMs,
+      },
+    );
+    sseStarted = true;
+  } catch (error) {
+    console.error('Failed to connect to SSE server:', error);
+    await cleanup();
+    process.exit(1);
+  }
+
   // Forward messages from Claude Desktop / Cursor (stdio) to Real Server (SSE)
   stdioTransport.onmessage = async (message: JSONRPCMessage) => {
     try {
-      if (sseStarted) {
+      if (sseStarted && sseTransport) {
         await sseTransport.send(message);
       } else {
         console.error('SSE Transport not ready. Dropping message from stdio client.');
@@ -174,7 +153,7 @@ async function main(): Promise<void> {
     process.exit(0);
   };
 
-  sseTransport.onerror = (error) => {
+  sseTransport.onerror = (error: Error) => {
     console.error('SSE Connection error:', error);
   };
 
@@ -183,22 +162,16 @@ async function main(): Promise<void> {
     process.exit(0);
   };
 
-  stdioTransport.onerror = (error) => {
+  stdioTransport.onerror = (error: Error) => {
     console.error('Stdio Connection error:', error);
   };
 
-  // Start the transports sequentially:
-  // Connect to SSE server first before exposing stdio interface to prevent dropped initialization frames.
   try {
-    await sseTransport.start();
-    sseStarted = true;
-
     await stdioTransport.start();
     stdioStarted = true;
-
-    console.error(`Proxy running. Connected to ${sseUrlString}`);
+    console.error(`Proxy running. Connected to ${sseUrl.href}`);
   } catch (error) {
-    console.error('Failed to connect to SSE server:', error);
+    console.error('Failed to start Stdio transport:', error);
     await cleanup();
     process.exit(1);
   }
