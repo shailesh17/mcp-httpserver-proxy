@@ -22,6 +22,14 @@
   <img src="./assets/social-preview.jpg" alt="MCP HTTP Server Proxy Banner" width="100%" />
 </p>
 
+<p align="center">
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-client-configuration-guides">Client Config</a> •
+  <a href="#-ecosystem-comparison-client-adapter-vs-server-wrapper">Ecosystem Comparison</a> •
+  <a href="#-cli-usage--options">CLI Options</a> •
+  <a href="#-ai-native-development--agent-setup">AI Setup</a>
+</p>
+
 A lightweight, high-performance transparent proxy that bridges [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) servers operating over HTTP with Server-Sent Events (SSE) to desktop and editor AI clients (such as [Claude Desktop](https://claude.ai/download) and [Cursor](https://www.cursor.com/)) communicating over standard input/output (`stdio`).
 
 ---
@@ -43,10 +51,10 @@ Here is why `mcp-httpserver-proxy` is a critical tool in your development workfl
 
 Here are common real-world scenarios where `mcp-httpserver-proxy` is actively used:
 
-### 1. 🗄️ Database Explorers & GUI Workspaces (e.g., Aerospike Voyager)
+### 1. 🗄️ Database & Search Server Integrations (e.g. Aerospike Voyager)
 
-- **The Challenge**: [Aerospike Voyager](https://aerospike.com/docs/tools/voyager/) is an interactive desktop developer workspace for browsing, querying, and managing Aerospike database clusters. Voyager includes a built-in embedded MCP server that operates over **HTTP with Server-Sent Events (SSE)** (typically at `http://localhost:9090/sse`). However, **Claude Desktop cannot natively connect to HTTP/SSE endpoints**—it strictly requires MCP servers to be spawned as local command-line subprocesses over `stdio`. Spawning Voyager itself via `stdio` is impractical because it wouldn't share the active database connection, authentication state, or UI context of your running desktop application.
-- **The Solution**: Keep Aerospike Voyager running as your active database GUI with its MCP HTTP/SSE server enabled. Configure Claude Desktop to run `npx mcp-httpserver-proxy http://localhost:9090/sse`. The proxy connects over SSE to your live Voyager application while exposing a standard `stdio` interface to Claude Desktop—enabling natural language database queries, schema exploration, and Aerospike Expression Language (AEL) generation directly in your chat.
+- **The Challenge**: Production-grade database connectors, vector databases, and semantic search systems (like [Aerospike Voyager](https://github.com/aerospike/voyager)) expose HTTP/SSE endpoints because they manage internal state, connection pools, and real-time streaming subscriptions across multiple queries.
+- **The Solution**: Use `mcp-httpserver-proxy` to connect Claude Desktop to your running Aerospike Voyager instance without installing specialized local database binaries or drivers in your desktop client.
 
 ### 2. 🐳 Docker Containers & DevContainers
 
@@ -92,6 +100,44 @@ Here are common real-world scenarios where `mcp-httpserver-proxy` is actively us
 3. **Transparent bi-directional forwarding**: JSON-RPC requests, notifications, and responses are forwarded in real time.
 4. **Lifecycle Coordination**: Guarantees the SSE backend connection is established before initiating the stdio handshake, preventing dropped initialization frames.
 5. **Stdio Stream Hygiene**: All diagnostics and error messages are isolated to `stderr`, keeping `stdout` strictly dedicated to JSON-RPC protocol frames.
+
+---
+
+## 🧭 Ecosystem Comparison: Client Adapter vs Server Wrapper
+
+When exploring Model Context Protocol (MCP) proxy tools, developers often encounter different tools with similar names. MCP proxies generally fall into two distinct, complementary architectural categories:
+
+```text
+Pattern A: Client-Side Adapter (This Project: mcp-httpserver-proxy)
+┌────────────────┐     stdio      ┌──────────────────────┐      SSE/HTTP      ┌────────────────┐
+│ Claude/Cursor  │ ─────────────► │ mcp-httpserver-proxy │ ─────────────────► │ Remote MCP     │
+│ (Desktop App)  │                │ (Client Bridge)      │                    │ (HTTP Server)  │
+└────────────────┘                └──────────────────────┘                    └────────────────┘
+
+Pattern B: Server-Side Wrapper (e.g. mcp-proxy, supergateway)
+┌────────────────┐    SSE/HTTP    ┌──────────────────────┐       stdio        ┌────────────────┐
+│ Web Client /   │ ─────────────► │      mcp-proxy       │ ─────────────────► │ Local Stdio    │
+│ Remote Service │                │ (Server-side Daemon) │                    │ MCP Tool CLI   │
+└────────────────┘                └──────────────────────┘                    └────────────────┘
+```
+
+### 📊 Architectural Comparison Matrix
+
+| Dimension                | `mcp-httpserver-proxy` (This Project)                                                                                                 | Server-Side Wrappers (e.g., `mcp-proxy`, `supergateway`)                                                            |
+| :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------ |
+| **Architectural Role**   | **Client-Side Adapter** (`stdio → SSE`)                                                                                               | **Server-Side Wrapper** (`SSE/HTTP → stdio`)                                                                        |
+| **Execution Location**   | Runs locally on the developer's desktop machine                                                                                       | Runs on a remote server or container host                                                                           |
+| **Client Transport**     | Local `stdio` (stdin/stdout)                                                                                                          | Network HTTP / Server-Sent Events (SSE)                                                                             |
+| **Backend Transport**    | Network HTTP / Server-Sent Events (SSE)                                                                                               | Local `stdio` child process                                                                                         |
+| **Primary Use Case**     | Connect desktop apps (Claude Desktop, Cursor) to existing remote HTTP/SSE servers (Aerospike Voyager, remote APIs, cloud containers). | Expose a legacy local CLI tool (`@modelcontextprotocol/server-postgres`) as an HTTP/SSE web service over a network. |
+| **Client Compatibility** | Claude Desktop, Cursor, Cline, Roo Code, Gemini IDE                                                                                   | Web browsers, curl, HTTP clients, remote agents                                                                     |
+| **Custom Auth Headers**  | ✅ Supported (`-H "Authorization: Bearer ..."`, `MCP_PROXY_HEADERS`)                                                                  | ❌ N/A (serves HTTP requests)                                                                                       |
+| **Connection Retries**   | ✅ Supported with exponential backoff (`--retries`, `--retry-delay`)                                                                  | ❌ N/A (waits for incoming connections)                                                                             |
+
+### 💡 Which tool should you use?
+
+- **Use `mcp-httpserver-proxy`** if you have an MCP server already running as an **HTTP/SSE service** (locally, in Docker, or on a remote server) and you want your **desktop AI client** (Claude Desktop, Cursor) to connect to it.
+- **Use a Server-Side Wrapper** if you have a **stdio-only CLI tool** (like an npm package or Python script) that you want to host on a server and expose to the web as an HTTP API.
 
 ---
 
