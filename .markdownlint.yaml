@@ -7,6 +7,15 @@ MD013: false
 # MD033: Inline HTML - allowed for center-aligned badges and headers
 MD033: false
 
+# MD041: First line heading - disabled for center-aligned <div align="center"> headers
+MD041: false
+
+# MD036: Emphasis as heading - allowed for taglines
+MD036: false
+
+# MD026: Trailing punctuation in heading - allowed for questions in FAQ/Why sections
+MD026: false
+
 # MD024: Multiple headings with same content
 MD024:
   siblings_only: true
