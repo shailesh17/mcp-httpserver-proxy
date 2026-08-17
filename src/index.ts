@@ -3,33 +3,82 @@
 import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { JSONRPCMessage } from '@modelcontextprotocol/sdk/types.js';
+import { resolveHeaders } from './headers.js';
 
 function printUsage(): void {
-  console.error('Usage: mcp-httpserver-proxy <mcp-server-sse-url>');
+  console.error('Usage: mcp-httpserver-proxy <mcp-server-sse-url> [options]');
   console.error('');
   console.error('Options:');
-  console.error('  -h, --help     Show help information');
-  console.error('  -v, --version  Show version number');
+  console.error('  -H, --header <name: value>  Custom HTTP request header (can be repeated)');
+  console.error('  -h, --help                  Show help information');
+  console.error('  -v, --version               Show version number');
+  console.error('');
+  console.error('Environment Variables:');
+  console.error('  MCP_PROXY_HEADERS           JSON string of key-value header pairs');
+  console.error('                              Example: \'{"Authorization": "Bearer secret"}\'');
   console.error('');
   console.error('Examples:');
   console.error('  mcp-httpserver-proxy http://localhost:8080/sse');
-  console.error('  mcp-httpserver-proxy https://api.example.com/mcp/events');
+  console.error(
+    '  mcp-httpserver-proxy https://api.example.com/sse -H "Authorization: Bearer secret"',
+  );
+  console.error(
+    '  mcp-httpserver-proxy https://api.example.com/sse -H "X-Api-Key: 123" -H "X-Tenant-ID: acme"',
+  );
 }
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
+  let sseUrlString: string | undefined;
+  const cliHeaders: string[] = [];
 
-  if (args.length < 1 || args.includes('--help') || args.includes('-h')) {
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+
+    if (arg === '--help' || arg === '-h') {
+      printUsage();
+      process.exit(0);
+    }
+
+    if (arg === '--version' || arg === '-v') {
+      console.error('mcp-httpserver-proxy v1.0.0');
+      process.exit(0);
+    }
+
+    if (arg === '-H' || arg === '--header') {
+      if (i + 1 >= args.length) {
+        console.error(
+          `Error: Option '${arg}' requires an argument in format "Header-Name: Header-Value"`,
+        );
+        printUsage();
+        process.exit(1);
+      }
+      cliHeaders.push(args[++i]);
+    } else if (arg.startsWith('-H=')) {
+      cliHeaders.push(arg.slice(3));
+    } else if (arg.startsWith('--header=')) {
+      cliHeaders.push(arg.slice(9));
+    } else if (arg.startsWith('-')) {
+      console.error(`Unknown option: ${arg}`);
+      printUsage();
+      process.exit(1);
+    } else {
+      if (!sseUrlString) {
+        sseUrlString = arg;
+      } else {
+        console.error(`Unexpected extra positional argument: ${arg}`);
+        printUsage();
+        process.exit(1);
+      }
+    }
+  }
+
+  if (!sseUrlString) {
+    console.error('Error: Missing required <mcp-server-sse-url> argument.');
     printUsage();
-    process.exit(args.includes('--help') || args.includes('-h') ? 0 : 1);
+    process.exit(1);
   }
 
-  if (args.includes('--version') || args.includes('-v')) {
-    console.error('mcp-httpserver-proxy v1.0.0');
-    process.exit(0);
-  }
-
-  const sseUrlString = args[0];
   let sseUrl: URL;
   try {
     sseUrl = new URL(sseUrlString);
@@ -39,11 +88,27 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
+  let headers: Record<string, string>;
+  try {
+    headers = resolveHeaders(cliHeaders, process.env.MCP_PROXY_HEADERS);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`Header configuration error: ${msg}`);
+    process.exit(1);
+  }
+
+  const customHeadersCount = Object.keys(headers).length;
+  if (customHeadersCount > 0) {
+    console.error(`Configured ${customHeadersCount} custom HTTP header(s) for backend connection.`);
+  }
+
   // Claude Desktop / Cursor uses stdio to communicate with this proxy (Proxy acts as the "Server")
   const stdioTransport = new StdioServerTransport();
 
   // Proxy uses SSE to communicate with the real MCP Server (Proxy acts as the "Client")
-  const sseTransport = new SSEClientTransport(sseUrl);
+  const sseTransport = new SSEClientTransport(sseUrl, {
+    requestInit: customHeadersCount > 0 ? { headers } : undefined,
+  });
 
   let sseStarted = false;
   let stdioStarted = false;

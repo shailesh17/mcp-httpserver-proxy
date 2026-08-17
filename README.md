@@ -151,41 +151,61 @@ In [Cursor](https://www.cursor.com/), configure your MCP server settings in `~/.
   "mcpServers": {
     "my-http-mcp-server": {
       "command": "npx",
-      "args": ["-y", "mcp-httpserver-proxy", "http://localhost:8080/sse"]
+      "args": [
+        "-y",
+        "mcp-httpserver-proxy",
+        "https://mcp.internal.corp/sse",
+        "-H",
+        "Authorization: Bearer my-secret-token",
+        "-H",
+        "X-Tenant-ID: acme"
+      ]
     }
   }
 }
 ```
 
-### 3. VS Code / Cline / Roo Code
-
-In [VS Code](https://code.visualstudio.com/) with [Cline](https://github.com/cline/cline) or [Roo Code](https://github.com/RooVetGit/Roo-Code), add to your MCP settings file:
-
-```json
-{
-  "mcpServers": {
-    "my-http-mcp-server": {
-      "command": "npx",
-      "args": ["-y", "mcp-httpserver-proxy", "http://localhost:8080/sse"]
-    }
-  }
-}
-```
+> **Using Environment Variables**: You can also use `MCP_PROXY_HEADERS` to pass sensitive headers without exposing tokens in process argument lists:
+>
+> ```json
+> {
+>   "mcpServers": {
+>     "my-http-mcp-server": {
+>       "command": "npx",
+>       "args": ["-y", "mcp-httpserver-proxy", "https://mcp.internal.corp/sse"],
+>       "env": {
+>         "MCP_PROXY_HEADERS": "{\"Authorization\": \"Bearer my-secret-token\"}"
+>       }
+>     }
+>   }
+> }
+> ```
 
 ---
 
 ## 💻 CLI Usage & Options
 
 ```text
-Usage: mcp-httpserver-proxy <mcp-server-sse-url>
+Usage: mcp-httpserver-proxy <mcp-server-sse-url> [options]
 
 Options:
-  -h, --help     Show help information
-  -v, --version  Show version number
+  -H, --header <name: value>  Custom HTTP request header (can be repeated)
+  -h, --help                  Show help information
+  -v, --version               Show version number
+
+Environment Variables:
+  MCP_PROXY_HEADERS           JSON string of key-value header pairs
+                              Example: '{"Authorization": "Bearer secret"}'
 
 Examples:
+  # Basic connection
   mcp-httpserver-proxy http://localhost:8080/sse
-  mcp-httpserver-proxy https://api.example.com/mcp/events
+
+  # With authentication headers
+  mcp-httpserver-proxy https://api.example.com/sse -H "Authorization: Bearer secret"
+
+  # Multiple headers
+  mcp-httpserver-proxy https://api.example.com/sse -H "X-Api-Key: 123" -H "X-Tenant-ID: acme"
 ```
 
 ---

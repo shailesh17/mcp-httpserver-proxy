@@ -28,4 +28,4 @@ build:
 test:
   stage: test
   script:
-    - pnpm run build
+    - pnpm test
