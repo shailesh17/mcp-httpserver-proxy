@@ -4,17 +4,23 @@
   <a href="https://github.com/shailesh17/mcp-httpserver-proxy/actions/workflows/ci.yml">
     <img src="https://github.com/shailesh17/mcp-httpserver-proxy/actions/workflows/ci.yml/badge.svg" alt="CI Status" />
   </a>
+  <a href="https://gitlab.com/shaileshpatel17/mcp-httpserver-proxy/-/pipelines">
+    <img src="https://img.shields.io/badge/GitLab%20CI-passing-orange.svg?logo=gitlab&logoColor=white" alt="GitLab CI Status" />
+  </a>
+  <a href="https://claude.ai">
+    <img src="https://img.shields.io/badge/Claude-Code%20Ready-D97706.svg?logo=anthropic&logoColor=white" alt="Claude Code Ready" />
+  </a>
   <a href="https://github.com/shailesh17/mcp-httpserver-proxy/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" />
   </a>
   <a href="https://nodejs.org">
-    <img src="https://img.shields.io/badge/Node.js-%3E%3D22.13.0-brightgreen.svg" alt="Node.js Version" />
+    <img src="https://img.shields.io/badge/Node.js-%3E%3D22.13.0-brightgreen.svg?logo=nodedotjs&logoColor=white" alt="Node.js Version" />
   </a>
   <a href="https://pnpm.io">
-    <img src="https://img.shields.io/badge/pnpm-11.x-orange.svg" alt="pnpm" />
+    <img src="https://img.shields.io/badge/pnpm-11.x-orange.svg?logo=pnpm&logoColor=white" alt="pnpm" />
   </a>
   <a href="https://www.conventionalcommits.org">
-    <img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg" alt="Conventional Commits" />
+    <img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?logo=conventionalcommits&logoColor=white" alt="Conventional Commits" />
   </a>
 </p>
 
@@ -271,6 +277,7 @@ This repository is built and maintained as a **100% AI-native development model*
 
 | File                                                                             | Purpose                                                       | Target Agent / Tool       |
 | :------------------------------------------------------------------------------- | :------------------------------------------------------------ | :------------------------ |
+| **[CLAUDE.md](./CLAUDE.md)**                                                     | Claude Code session instructions, task commands, and rules    | Anthropic Claude Code CLI |
 | **[AGENTS.md](./AGENTS.md)**                                                     | Core architectural constraints, stdout rules, and PR workflow | All AI Coding Assistants  |
 | **[GEMINI.md](./GEMINI.md)**                                                     | Antigravity / Gemini IDE workspace instructions               | Antigravity, Gemini CLI   |
 | **[.github/copilot-instructions.md](./.github/copilot-instructions.md)**         | IDE coding instructions                                       | GitHub Copilot, Cursor    |
